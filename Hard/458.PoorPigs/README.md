@@ -1,4 +1,4 @@
-# 🏙️ Problem: 458. Rooftops
+# 🏙️ Problem: 458. PoorPigs
 
 🔗 https://leetcode.com/problems/poor-pigs/
 
