@@ -1,89 +1,3 @@
-/*
- * OPTIMIZED SOLUTION: Poor Pigs Problem
- * 
- * PROBLEM RECAP:
- * We have some buckets of juice, one of which is poisoned. We need to figure out 
- * which bucket is poisoned using the minimum number of pigs. Each pig can drink from
- * multiple buckets, and we have a limited time window with multiple test rounds.
- * If a pig drinks poison, it will die within minutesToDie minutes.
- * 
- * THE JUICE AND PIGS ANALOGY - OPTIMIZED APPROACH:
- * 
- * Let's use the SAME example: 8 cups of juice, 1 pig, 2 test rounds (60 min to test, 15 min to die)
- * 
- * In the BRUTE FORCE approach, we tested one cup at a time:
- *   Round 1: Test cup 0 → if pig dies, poison is in cup 0; otherwise continue
- *   Round 2: Test cup 1 → if pig dies, poison is in cup 1; otherwise continue
- *   ...
- * This meant we could only test 2 cups with 1 pig and 2 rounds.
- * 
- * WHY BRUTE FORCE WAS INEFFICIENT:
- * The brute force approach wasted information! When a pig survives, we learn:
- *   "The poison is NOT in the cups the pig drank from"
- * But we only tested ONE cup per round, so we only eliminated ONE possibility.
- * 
- * THE OPTIMAL INSIGHT - INFORMATION THEORY:
- * Each pig, over the entire testing period, can exist in (minutesToTest / minutesToDie) + 1 STATES:
- *   - Dies after round 1
- *   - Dies after round 2
- *   - Dies after round 3
- *   - ...
- *   - Dies after round N
- *   - NEVER dies (survives all rounds)
- * 
- * For our example: (60 / 15) + 1 = 4 + 1 = 5 possible states per pig
- * 
- * STEP-BY-STEP WALKTHROUGH WITH 8 CUPS, 1 PIG, 2 TEST ROUNDS:
- * 
- * Our pig can be in 3 states:
- *   State 0: Dies in round 1 (after drinking at minute 0)
- *   State 1: Dies in round 2 (after drinking at minute 15)
- *   State 2: Survives all rounds
- * 
- * Wait, that's only 3 states, but we have 8 cups!
- * The formula says: states_per_pig^number_of_pigs >= buckets
- *                   3^1 = 3, but we need 8!
- * 
- * This means 1 pig with 2 rounds is NOT ENOUGH for 8 cups in the optimal solution either.
- * We'd need at least 2 pigs: 3^2 = 9 >= 8 ✓
- * 
- * Let me redo the example with 4 cups, 1 pig, 2 test rounds:
- * 
- * OPTIMAL STRATEGY FOR 4 CUPS, 1 PIG, 2 TEST ROUNDS:
- * Pig can be in 3 states (dies round 1, dies round 2, or survives)
- * 3^1 = 3, but we need 4... still not enough!
- * 
- * Let me use the PERFECT example: 3 CUPS, 1 PIG, 2 TEST ROUNDS
- * 
- * States: 3 (dies R1, dies R2, survives) → 3^1 = 3 = 3 cups ✓ PERFECT!
- * 
- * Strategy:
- *   Round 1 (minute 0):  Pig drinks from Cup 0
- *   Round 2 (minute 15): Pig drinks from Cup 1
- *   
- * Outcomes:
- *   - Pig dies after round 1 → Poison in Cup 0
- *   - Pig dies after round 2 → Poison in Cup 1  
- *   - Pig survives        → Poison in Cup 2 (the cup we never tested!)
- * 
- * BACK TO OUR ORIGINAL EXAMPLE: 8 CUPS
- * 
- * For 8 cups with (60/15) = 4 test rounds:
- * States per pig = 4 + 1 = 5 (dies R1, R2, R3, R4, or survives)
- * Need: 5^pigs >= 8
- *       5^1 = 5 < 8 ✗
- *       5^2 = 25 >= 8 ✓
- * Answer: 2 pigs needed!
- * 
- * THE MATH - WHY THIS IS OPTIMAL:
- * 
- * Each pig can encode (rounds + 1) states through WHEN it dies (or if it survives).
- * With multiple pigs, we can combine their states:
- *   1 pig:  (rounds + 1)^1 buckets
- *   2 pigs: (rounds + 1)^2 buckets
- *   3 pigs: (rounds + 1)^3 buckets
- *   N pigs: (rounds + 1)^N buckets
- * 
  * We need: (rounds + 1)^N >= buckets
  * Solving for N: N >= log(buckets) / log(rounds + 1)
  * Therefore: N = ceil(log(buckets) / log(rounds + 1))
@@ -136,24 +50,65 @@
  * 
  * Edge case: if buckets = 1, no testing needed → 0 pigs
  */
-
 class Solution {
 public:
     int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
-        // Edge case: only 1 bucket, no pigs needed
-        if (buckets == 1) return 0;
+        // STEP 1: Calculate the number of rounds available
+        // ------------------------------------------------
+        // T represents how many complete test rounds we can perform
+        // Example: If we have 60 minutes to test and each pig takes 15 minutes to die,
+        //          then T = 60/15 = 4 rounds
+        // This is crucial because it determines how many "states" each pig can have
+        int T = minutesToTest / minutesToDie;
         
-        // Calculate number of test rounds possible
-        int rounds = minutesToTest / minutesToDie;
+        // STEP 2: Initialize the pig counter
+        // ----------------------------------
+        // We start with 0 pigs and increment until we have enough to distinguish all buckets
+        // Think of this as: "How many dimensions do we need for our search space?"
+        int count = 0;
         
-        // Each pig can be in (rounds + 1) states:
-        // - Dies after round 1, 2, 3, ..., rounds
-        // - Survives all rounds (never dies)
-        int states = rounds + 1;
+        // STEP 3: Find minimum pigs needed using exponential growth
+        // ---------------------------------------------------------
+        // KEY INSIGHT: Each pig can be in (T+1) different states:
+        //   - Dies in round 1, 2, 3, ..., T, or doesn't die at all
+        //   - That's T+1 total states per pig!
+        // 
+        // With N pigs, we can distinguish (T+1)^N different scenarios
+        // Example: 2 pigs with 4 rounds each → (4+1)^2 = 5^2 = 25 buckets!
+        // 
+        // The formula: (T+1)^count >= buckets
+        // We keep incrementing count until this inequality is satisfied
+        // 
+        // WHY THIS WORKS (Real-world analogy):
+        //   - Imagine each pig as a digit in a base-(T+1) number system
+        //   - Pig 1 can represent positions 0 to T (dies at different rounds or not at all)
+        //   - Pig 2 can represent positions 0 to T (independent of Pig 1)
+        //   - Together they can represent (T+1) × (T+1) = (T+1)^2 unique combinations
+        //   - This is like how 2 decimal digits can represent 10^2 = 100 numbers (0-99)
+        while(pow((T+ 1) , count) < buckets){
+            // Not enough pigs yet! Each additional pig multiplies our capacity by (T+1)
+            // Example progression with T=4:
+            //   0 pigs: 5^0 = 1 bucket
+            //   1 pig:  5^1 = 5 buckets  
+            //   2 pigs: 5^2 = 25 buckets
+            //   3 pigs: 5^3 = 125 buckets
+            //   4 pigs: 5^4 = 625 buckets
+            count++;
+        }
         
-        // We need: states^pigs >= buckets
-        // Therefore: pigs >= log(buckets) / log(states)
-        // Using ceiling to get minimum integer pigs
-        return (int)ceil(log(buckets) / log(states));
+        // STEP 4: Return the minimum number of pigs needed
+        // ------------------------------------------------
+        // At this point, (T+1)^count >= buckets
+        // This means 'count' pigs are sufficient to identify the poisoned bucket
+        // 
+        // EDGE CASE HANDLING (automatically covered):
+        //   - If buckets = 1: pow(T+1, 0) = 1 >= 1, so count stays 0 (no pigs needed!)
+        //   - This makes sense: if there's only 1 bucket, it must be the poisoned one
+        // 
+        // EFFICIENCY NOTE:
+        //   - Time Complexity: O(log_base_(T+1) buckets) ≈ O(log buckets)
+        //   - Space Complexity: O(1)
+        //   - This is exponentially better than brute force O(buckets/rounds)
+        return count;
     }
 };
