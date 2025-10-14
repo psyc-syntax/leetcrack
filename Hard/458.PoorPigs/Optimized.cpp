@@ -1,4 +1,4 @@
- * We need: (rounds + 1)^N >= buckets
+ /* We need: (rounds + 1)^N >= buckets
  * Solving for N: N >= log(buckets) / log(rounds + 1)
  * Therefore: N = ceil(log(buckets) / log(rounds + 1))
  * 
