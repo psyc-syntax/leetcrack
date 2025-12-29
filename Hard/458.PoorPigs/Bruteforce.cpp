@@ -94,13 +94,13 @@ public:
     // buckets = 1000, die = 15, test = 60
     // States = (60/15) + 1 = 5
     // 5^p = 1000 -> p = 5
-    cout << "Test 1 (1000, 15, 60): " << sol.poorPigs(1000, 15, 60) << " pigs" << endl;
+    cout << "Test 1 (1000, 15, 60): " << poorPigs(1000, 15, 60) << " pigs" << endl;
 
     // Test Case 2
-    cout << "Test 2 (4, 15, 15): " << sol.poorPigs(4, 15, 15) << " pigs" << endl;
+    cout << "Test 2 (4, 15, 15): " << poorPigs(4, 15, 15) << " pigs" << endl;
 
     // Test Case 3
-    cout << "Test 3 (4, 15, 30): " << sol.poorPigs(4, 15, 30) << " pigs" << endl;
+    cout << "Test 3 (4, 15, 30): " << poorPigs(4, 15, 30) << " pigs" << endl;
 
     return 0;
 }
