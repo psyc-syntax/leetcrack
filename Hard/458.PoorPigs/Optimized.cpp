@@ -50,6 +50,9 @@
  * 
  * Edge case: if buckets = 1, no testing needed → 0 pigs
  */
+
+#include<bits/stdc++.h>
+using namespace std;
 class Solution {
 public:
     int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
@@ -111,4 +114,22 @@ public:
         //   - This is exponentially better than brute force O(buckets/rounds)
         return count;
     }
+
+    int main() {
+    Solution sol;
+
+    // Test Case 1
+    // buckets = 1000, die = 15, test = 60
+    // States = (60/15) + 1 = 5
+    // 5^p = 1000 -> p = 5
+    cout << "Test 1 (1000, 15, 60): " << sol.poorPigs(1000, 15, 60) << " pigs" << endl;
+
+    // Test Case 2
+    cout << "Test 2 (4, 15, 15): " << sol.poorPigs(4, 15, 15) << " pigs" << endl;
+
+    // Test Case 3
+    cout << "Test 3 (4, 15, 30): " << sol.poorPigs(4, 15, 30) << " pigs" << endl;
+
+    return 0;
+}
 };
