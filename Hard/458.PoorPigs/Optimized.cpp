@@ -116,8 +116,6 @@ public:
     }
 
     int main() {
-    Solution sol;
-
     // Test Case 1
     // buckets = 1000, die = 15, test = 60
     // States = (60/15) + 1 = 5
