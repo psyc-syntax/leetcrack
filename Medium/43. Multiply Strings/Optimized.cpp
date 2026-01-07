@@ -33,7 +33,7 @@ RULES / NOTES:
 - Space complexity: O(m + n) for the intermediate digit array
 
 --------------------------------------------------------------------------------
-C++ CODE WITH SIMPLE ENGLISH COMMENTS
+soulution starts here
 --------------------------------------------------------------------------------
 */
 
