@@ -24,7 +24,7 @@ WHAT A TRUE BRUTE-FORCE LRU MIGHT DO (for comparison):
 - On every get/put, scan the list to:
   - Find the key.
   - Decide which key is least recently used.
-- This would be **O(n)** per operation (linear scan), which is slow for big caches.[web:94][web:92]
+- This would be **O(n)** per operation (linear scan), which is slow for big caches.
 
 THIS IMPLEMENTATION (YOUR CODE) — OPTIMIZED IDEA:
 - Combines:
@@ -32,10 +32,10 @@ THIS IMPLEMENTATION (YOUR CODE) — OPTIMIZED IDEA:
      - Stores nodes with (key, value).
      - Head = **most recently used**.
      - Tail = **least recently used**.
-     - We can move nodes to front and remove from back in O(1).[web:92][web:93]
+     - We can move nodes to front and remove from back in O(1).
   2) **unordered_map<int, Node*>**:
      - Maps key → pointer to its node in the list.
-     - Lookup by key is O(1) average.[web:92][web:96]
+     - Lookup by key is O(1) average.
 
 - So:
   - get(key) can:
@@ -45,7 +45,7 @@ THIS IMPLEMENTATION (YOUR CODE) — OPTIMIZED IDEA:
     - Insert/update node and adjust list in O(1).
     - Remove tail node (LRU) in O(1) when needed.
 
-Compared to true brute force O(n) scanning, this is **optimized O(1)** per operation.[web:96][web:101]
+Compared to true brute force O(n) scanning, this is **optimized O(1)** per operation.
 
 --------------------------------------------------------------------------------
 CODE WITH STEP-BY-STEP COMMENTS (IN BRUTE-FORCE STYLE EXPLANATION)
@@ -197,11 +197,11 @@ public:
 WHY THIS IS “BRUTE FORCE FIXED” / COMPARED TO NAIVE:
 --------------------------------------------------------------------------------
 - Naive LRU:
-  - Would linearly scan to find keys and LRU entries → O(n) per get/put.[web:94]
+  - Would linearly scan to find keys and LRU entries → O(n) per get/put.
 - This implementation:
-  - Uses hashmap for direct key lookup → O(1).[web:92][web:96]
-  - Uses doubly linked list for O(1) move-to-front and remove-tail.[web:92][web:93]
+  - Uses hashmap for direct key lookup → O(1).
+  - Uses doubly linked list for O(1) move-to-front and remove-tail.
   - Thus, get and put are both **O(1)** average, which is the optimal design
-    expected in interviews and CP problems.[web:96][web:101]
+    expected in interviews and CP problems.
 ================================================================================
 */
