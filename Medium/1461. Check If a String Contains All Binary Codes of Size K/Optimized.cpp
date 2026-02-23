@@ -88,7 +88,7 @@ public:
 
         // Total different binary strings of length k = 2^k
         // Use bit shift instead of pow to avoid floating point issues.
-        unsigned int totalCodes = 1u << k;
+        unsigned int totalCodes = pow(2, k);
 
         // If number of distinct k-length substrings equals total possible codes,
         // then s contains all binary codes of size k.
