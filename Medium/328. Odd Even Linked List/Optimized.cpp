@@ -14,8 +14,8 @@ PROBLEM (LeetCode 328 style):
   - 2nd node → even
   - 3rd node → odd, etc.
 - The **relative order** inside the odd group and inside the even group
-  must remain the same as in the original list.[web:170][web:174][web:177]
-- Required: O(n) time, O(1) extra space.[web:171][web:174]
+  must remain the same as in the original list
+- Required: O(n) time, O(1) extra space.
 
 YOUR APPROACH (OPTIMIZED BUT DIFFERENT FROM TYPICAL TWO-POINTER SOLUTION):
 - First pass:
@@ -102,9 +102,9 @@ COMPLEXITY ANALYSIS
 - Let n be the number of nodes.
 - First while loop: walk from head to tail, count nodes → O(n).
 - Second while loop: `moves = floor(n/2)` iterations, each does O(1) pointer ops → O(n).
-- Total Time: O(n).[web:171][web:174]
-- Extra Space: O(1) (only a few pointers and integers).[web:171][web:174][web:177]
+- Total Time: O(n).
+- Extra Space: O(1) (only a few pointers and integers).
 
-This satisfies the optimized requirement: **single list, in-place pointer changes, no extra arrays or lists**, and preserves relative order of odd and even nodes.[web:171][web:174][web:179]
+This satisfies the optimized requirement: **single list, in-place pointer changes, no extra arrays or lists**, and preserves relative order of odd and even nodes.
 ================================================================================
 */
